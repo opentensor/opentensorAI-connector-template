@@ -1,6 +1,6 @@
 ## SN Owners' to do list 
 
-- Fork the template and put up a PR to create a React app that works for respective SN 
+- Fork the template and put up a PR to create a React app that works for respective SN: add @specialK111 as reviewer. Set up a walkthrough session with @specialK111
   
 - SLA
 
