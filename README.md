@@ -10,10 +10,6 @@
 
 ## Web 2 and Connector Architecture
 
-It's not clear to me if the Micro Frontends (MFE) need to be fluent in non https talk. 
-
-The reason being not all AI models are the same. Some are stream based, some could be queue based, and some are prompt/response interactive.
-
 ```mermaid
 flowchart LR
     Alice --> web2_ELB
