@@ -1,0 +1,233 @@
+openapi: 3.1.0
+info:
+  title: Library API
+  description: This is a simple API for managing a library system.
+  version: "1.0.0"
+servers:
+  - url: "https://api.library.com/v1"
+    description: Production server
+tags:
+  - name: Books
+    description: Operations related to books in the library
+  - name: Members
+    description: Operations related to library members
+  - name: Loans
+    description: Operations related to loans of books
+paths:
+  /books:
+    get:
+      tags:
+        - Books
+      summary: List all books
+      operationId: listBooks
+      responses:
+        "200":
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Book"
+    post:
+      tags:
+        - Books
+      summary: Add a new book
+      operationId: addBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+      responses:
+        "201":
+          description: Book created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+  /books/{id}:
+    get:
+      tags:
+        - Books
+      summary: Get a book by ID
+      operationId: getBookById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Details of a specific book
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+    put:
+      tags:
+        - Books
+      summary: Update a book
+      operationId: updateBook
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+      responses:
+        "200":
+          description: Book updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+    delete:
+      tags:
+        - Books
+      summary: Delete a book
+      operationId: deleteBook
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Book deleted successfully
+  /members:
+    get:
+      tags:
+        - Members
+      summary: List all members
+      operationId: listMembers
+      responses:
+        "200":
+          description: A list of members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Member"
+    post:
+      tags:
+        - Members
+      summary: Bulk add members
+      operationId: addMembersBulk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Member"
+      responses:
+        "201":
+          description: Members added successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Member"
+  /loans:
+    get:
+      tags:
+        - Loans
+      summary: List all loans
+      operationId: listLoans
+      responses:
+        "200":
+          description: A list of all current loans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Loan"
+    post:
+      tags:
+        - Loans
+      summary: Create a new loan
+      operationId: createLoan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Loan"
+      responses:
+        "201":
+          description: Loan created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Loan"
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        author:
+          type: string
+        isbn:
+          type: string
+        available:
+          type: boolean
+    Member:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        membershipStartDate:
+          type: string
+          format: date
+    Loan:
+      type: object
+      properties:
+        loanId:
+          type: integer
+          format: int64
+        bookId:
+          type: integer
+          format: int64
+        memberId:
+          type: integer
+          format: int64
+        loanDate:
+          type: string
+          format: date-time
+        dueDate:
+          type: string
+          format: date-time
+        returnDate:
+          type: string
+          format: date-time

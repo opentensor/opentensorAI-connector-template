@@ -1,0 +1,121 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "FileTAO Storage API",
+      "description": "API for storing and retrieving data, where data is base64 encoded.",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://api.hackathon.test.opentensor.ai",
+        "description": "Hackathon Storage API Server"
+      }
+    ],
+    "paths": {
+      "/store/": {
+        "post": {
+          "summary": "Store data",
+          "operationId": "storeData",
+          "tags": [
+            "Storage"
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "format": "byte",
+                      "description": "Data to be stored, base64 encoded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Data stored successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "cid": {
+                        "type": "string",
+                        "description": "Content Identifier"
+                      },
+                      "hotkeys": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Array of hotkeys"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Failed to store data"
+            }
+          }
+        }
+      },
+      "/retrieve/": {
+        "get": {
+          "summary": "Retrieve data",
+          "operationId": "retrieveData",
+          "tags": [
+            "Storage"
+          ],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "cid",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Content Identifier"
+            },
+            {
+              "in": "query",
+              "name": "hotkeys",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Comma-separated list of hotkeys"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Data retrieved successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "string",
+                        "format": "byte",
+                        "description": "Retrieved data, base64 encoded"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Failed to retrieve data"
+            }
+          }
+        }
+      }
+    }
+  }
