@@ -1,0 +1,264 @@
+
+"openapi": "3.1.0"
+"info":
+  "title": "validator-api"
+  "description": "The goal of validator-api is to set up how to message between Chat API and validators."
+  "version": "0.1.0"
+"paths":
+  "/api/text_query":
+    "post":
+      "tags":
+        - "validator api"
+      "summary": "POST /natural language query"
+      "description": "Generate a response to user query\n\nThis endpoint allows miners convert the natural language query from the user into a Cypher query, and then provide a concise response in natural language.\n\n**Parameters:**\n`query` (ChatMessageRequest): natural language query from users, network(Bitcoin, Ethereum, ...), User ID. network: str user_id: UUID prompt: str\n**Returns:**\n`ChatMessageResponse`: response in natural language. - `text` (str): miner response.                 - `miner_id` (str): responded miner uid\n**Example Request:**\n```json\nPOST /text-query\n{ \"network\": \"Bitcoin\", \"user_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\" \"message_content\": \"Show me 15 transactions I sent after block height 800000. My address is bc1q4s8yps9my6hun2tpd5ke5xmvgdnxcm2qspnp9r\" }\n```\n\n**Example Response:**\n```json\n{ \"text\": \"15 transactions you sent are as follows. ...\", \"miner_id\": \"230\",                 }\n```"
+      "operationId": "get_response_api_text_query_post"
+      "requestBody":
+        "content":
+          "application/json":
+            "schema":
+              "properties":
+                "network":
+                  "type": "string"
+                  "title": "Network"
+                "user_id":
+                  "type": "string"
+                  "format": "uuid"
+                  "title": "User Id"
+                "prompt":
+                  "type": "string"
+                  "title": "Prompt"
+              "type": "object"
+              "required":
+                - "network"
+                - "user_id"
+                - "prompt"
+              "title": "ChatMessageRequest"
+        "required": true
+      "responses":
+        "200":
+          "description": "Successful Response"
+          "content":
+            "application/json":
+              "schema": {}
+        "422":
+          "description": "Validation Error"
+          "content":
+            "application/json":
+              "schema":
+                "properties":
+                  "detail":
+                    "items":
+                      "properties":
+                        "loc":
+                          "items":
+                            "anyOf":
+                              -
+                                "type": "string"
+                              -
+                                "type": "integer"
+                          "type": "array"
+                          "title": "Location"
+                        "msg":
+                          "type": "string"
+                          "title": "Message"
+                        "type":
+                          "type": "string"
+                          "title": "Error Type"
+                      "type": "object"
+                      "required":
+                        - "loc"
+                        - "msg"
+                        - "type"
+                      "title": "ValidationError"
+                    "type": "array"
+                    "title": "Detail"
+                "type": "object"
+                "title": "HTTPValidationError"
+  "api/text_query/variant":
+    "post":
+      "tags":
+        - "validator api"
+      "summary": "POST /variation request for natual language query"
+      "description": "A validator would be able to receive a user request to generate a variation on a previously generated message. It will return the new message and store the fact that a specific miner's message had a variation request.\n- Receive temperature. The temperature will determine the creativity of the response.\n- Return generated variation text and miner ID.\n\n**Parameters:**\n`query` (ChatMessageVariantRequest): natural language query from users, network(Bitcoin, Ethereum, ...), User ID, Miner UID, temperature. network: str user_id: UUID prompt: str temperature: float miner_id: str **Returns:**\n- `ChatMessageResponse`: response in natural language. - `text` (str): miner response.                 - `miner_id` (str): responded miner uid\n**Example Request:**\n```json\nPOST /text-query\n{ \"network\": \"Bitcoin\", \"user_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\", \"message_content\": \"Show me 15 transactions I sent after block height 800000. My address is bc1q4s8yps9my6hun2tpd5ke5xmvgdnxcm2qspnp9r\", \"temperature\": \"0.1\", miner_id: \"230\", }\n```\n\n**Example Response:**\n```json\n{ \"text\": \"15 transactions you sent are as follows. ...\", \"miner_id\": \"230\",                 }\n```"
+      "operationId": "get_response_variantapi_text_query_variant_post"
+      "requestBody":
+        "content":
+          "application/json":
+            "schema":
+              "properties":
+                "network":
+                  "type": "string"
+                  "title": "Network"
+                "user_id":
+                  "type": "string"
+                  "format": "uuid"
+                  "title": "User Id"
+                "prompt":
+                  "type": "string"
+                  "title": "Prompt"
+                "temperature":
+                  "type": "number"
+                  "title": "Temperature"
+                "miner_id":
+                  "type": "string"
+                  "title": "Miner Id"
+              "type": "object"
+              "required":
+                - "network"
+                - "user_id"
+                - "prompt"
+                - "temperature"
+                - "miner_id"
+              "title": "ChatMessageVariantRequest"
+        "required": true
+      "responses":
+        "200":
+          "description": "Successful Response"
+          "content":
+            "application/json":
+              "schema": {}
+        "422":
+          "description": "Validation Error"
+          "content":
+            "application/json":
+              "schema":
+                "properties":
+                  "detail":
+                    "items":
+                      "properties":
+                        "loc":
+                          "items":
+                            "anyOf":
+                              -
+                                "type": "string"
+                              -
+                                "type": "integer"
+                          "type": "array"
+                          "title": "Location"
+                        "msg":
+                          "type": "string"
+                          "title": "Message"
+                        "type":
+                          "type": "string"
+                          "title": "Error Type"
+                      "type": "object"
+                      "required":
+                        - "loc"
+                        - "msg"
+                        - "type"
+                      "title": "ValidationError"
+                    "type": "array"
+                    "title": "Detail"
+                "type": "object"
+                "title": "HTTPValidationError"
+  "/":
+    "get":
+      "tags":
+        - "default"
+      "summary": "Healthcheck"
+      "operationId": "healthcheck__get"
+      "responses":
+        "200":
+          "description": "Successful Response"
+          "content":
+            "application/json":
+              "schema": {}
+"components":
+  "schemas":
+    "ChatMessageRequest":
+      "properties":
+        "network":
+          "type": "string"
+          "title": "Network"
+        "user_id":
+          "type": "string"
+          "format": "uuid"
+          "title": "User Id"
+        "prompt":
+          "type": "string"
+          "title": "Prompt"
+      "type": "object"
+      "required":
+        - "network"
+        - "user_id"
+        - "prompt"
+      "title": "ChatMessageRequest"
+    "ChatMessageVariantRequest":
+      "properties":
+        "network":
+          "type": "string"
+          "title": "Network"
+        "user_id":
+          "type": "string"
+          "format": "uuid"
+          "title": "User Id"
+        "prompt":
+          "type": "string"
+          "title": "Prompt"
+        "temperature":
+          "type": "number"
+          "title": "Temperature"
+        "miner_id":
+          "type": "string"
+          "title": "Miner Id"
+      "type": "object"
+      "required":
+        - "network"
+        - "user_id"
+        - "prompt"
+        - "temperature"
+        - "miner_id"
+      "title": "ChatMessageVariantRequest"
+    "HTTPValidationError":
+      "properties":
+        "detail":
+          "items":
+            "properties":
+              "loc":
+                "items":
+                  "anyOf":
+                    -
+                      "type": "string"
+                    -
+                      "type": "integer"
+                "type": "array"
+                "title": "Location"
+              "msg":
+                "type": "string"
+                "title": "Message"
+              "type":
+                "type": "string"
+                "title": "Error Type"
+            "type": "object"
+            "required":
+              - "loc"
+              - "msg"
+              - "type"
+            "title": "ValidationError"
+          "type": "array"
+          "title": "Detail"
+      "type": "object"
+      "title": "HTTPValidationError"
+    "ValidationError":
+      "properties":
+        "loc":
+          "items":
+            "anyOf":
+              -
+                "type": "string"
+              -
+                "type": "integer"
+          "type": "array"
+          "title": "Location"
+        "msg":
+          "type": "string"
+          "title": "Message"
+        "type":
+          "type": "string"
+          "title": "Error Type"
+      "type": "object"
+      "required":
+        - "loc"
+        - "msg"
+        - "type"
+      "title": "ValidationError"
