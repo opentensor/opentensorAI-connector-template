@@ -1,0 +1,118 @@
+openapi: 3.1.0
+info:
+  title: Datura API
+  summary: API for searching across multiple platforms
+  version: 1.0.0
+  x-logo:
+    url: https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png
+servers:
+  - url: https://api-sn22.datura.ai
+    description: Datura API
+paths:
+  /search:
+    get:
+      summary: Search across multiple platforms
+      description: |-
+        Performs a search across multiple platforms. Available tools are:
+        - Twitter Search: Uses Twitter API to search for tweets in past week date range.
+        - Google Search: Searches the web using Google.
+        - Google News Search: Searches news articles using Google News.
+        - Google Image Search: Searches images using Google.
+        - Bing Search: Searches the web using Bing.
+        - ArXiv Search: Searches academic papers on ArXiv.
+        - Wikipedia Search: Searches articles on Wikipedia.
+        - Youtube Search: Searches videos on Youtube.
+        - Hacker News Search: Searches posts on Hacker News, under the hood it uses Google search.
+        - Reddit Search: Searches posts on Reddit, under the hood it uses Google search.
+      operationId: search_search_get
+      parameters:
+        - description: A JSON encoded list of tools to search with
+          required: true
+          schema:
+            type: string
+            title: Tools
+            description: A JSON encoded list of tools to search with
+          example: '["Twitter Search", "Google Search", "Google News Search", "Google Image Search", "Bing Search", "ArXiv Search", "Wikipedia Search", "Youtube Search", "Hacker News Search", "Reddit Search"]'
+          name: tools
+          in: query
+        - required: true
+          schema:
+            type: string
+            title: Query
+          example: What are the recent sport events?
+          name: query
+          in: query
+        - description: Optional miner uid to run. If not provided, a random miner will be selected.
+          required: false
+          schema:
+            type: integer
+            title: Uid
+            description: Optional miner uid to run. If not provided, a random miner will be selected.
+          example: 0
+          name: uid
+          in: query
+      responses:
+        "200":
+          description: A dictionary of search results from the specified tools.
+          content:
+            application/json:
+              schema: {}
+              example:
+                Twitter Search: {}
+                Google Search: {}
+                Google News Search: {}
+                Google Image Search: {}
+                Bing Search: {}
+                ArXiv Search: {}
+                Wikipedia Search: {}
+                Youtube Search: {}
+                Hacker News Search: {}
+                Reddit Search: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /:
+    get:
+      summary: Health Check
+      operationId: health_check__get
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: "#/components/schemas/ValidationError"
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
