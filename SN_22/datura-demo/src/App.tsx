@@ -23,7 +23,7 @@ function App() {
   const uidId = useId();
 
   const handleClick = async () => {
-    const baseUrl = "https://api.smartscrape.ai";
+    const baseUrl = "https://api-sn22.datura.ai";
 
     // Tools array are converted to string
     const toolsString = JSON.stringify(tools);

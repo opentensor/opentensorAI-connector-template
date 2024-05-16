@@ -6,7 +6,7 @@ info:
   x-logo:
     url: https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png
 servers:
-  - url: https://api.smartscrape.ai
+  - url: https://api-sn22.datura.ai
     description: Datura API
 paths:
   /search:
