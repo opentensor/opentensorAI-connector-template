@@ -1,0 +1,97 @@
+openapi: "3.1.0"
+info:
+  title: "Omega Labs Multi-Modal API"
+  description: "API for querying Omega's any-to-any multi-modal data."
+  version: "1.0.0"
+servers:
+  - url: "https://validator.api.omega-labs.ai"
+    description: "Omega API server"
+tags: []
+paths:
+  /api/mm/topics:
+    get:
+      summary: "Get all topics from the multi-modal dataset"
+      operationId: "get_mm_topics"
+      responses:
+        '200':
+          description: "A list of topics"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+              example:
+                - "topic1"
+                - "topic2"
+                - "topic3"
+  /api/mm/topic_video_count:
+    get:
+      summary: "Get all topics and their corresponding total number of videos from the multi-modal dataset"
+      operationId: "get_mm_topic_video_count"
+      responses:
+        '200':
+          description: "An array of dictionaries containing a topic and its video count"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    query:
+                      type: "string"
+                    num_videos:
+                      type: "integer"
+              example:
+                - query: "topic1"
+                  num_videos: 5000
+                - query: "topic2"
+                  num_videos: 3000
+  /api/mm/topic_relevent/{topic}:
+    get:
+      summary: "Get all videos and their metadata relevant to the provided topic from the multi-modal dataset"
+      operationId: "get_mm_topic_relevent"
+      parameters:
+        - in: "path"
+          name: "topic"
+          required: true
+          schema:
+            type: "string"
+          description: "Topic identifier"
+      responses:
+        '200':
+          description: "An array of dictionaries containing video metadata"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    video_id:
+                      type: "string"
+                      description: "Unique identifier for the video"
+                    youtube_id:
+                      type: "string"
+                      description: "YouTube video ID"
+                    description:
+                      type: "string"
+                      description: "Description of the video"
+                    start_time:
+                      type: "integer"
+                      description: "Start time of the video in seconds"
+                    end_time:
+                      type: "integer"
+                      description: "End time of the video in seconds"
+              example:
+                - video_id: "e5a3702f-24c5-4b45-929e-891aa2522240"
+                  youtube_id: "IXw2FjnqKRI"
+                  description: "3d modeling showreel 2022,  maya and zbrush."
+                  start_time: 0
+                  end_time: 102
+                - video_id: "82e3b3fb-9b75-4ecb-a0f2-2019c93c80bf"
+                  youtube_id: "juqrheu2r2w"
+                  description: "3ds Max Fundamentals: 3D Modeling and Look Development\n\nOr you can check my Udemy courses here directly: - Digital Painting with Krita 5.0 for beginners ..."
+                  start_time: 0
+                  end_time: 120
