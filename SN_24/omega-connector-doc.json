@@ -36,7 +36,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "APIKeyHeader": ["OMEGA_MM_API_KEY"]
+          }
+        ]
       }
     },
     "/api/mm/topic_video_count": {
@@ -75,7 +80,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "APIKeyHeader": ["OMEGA_MM_API_KEY"]
+          }
+        ]
       }
     },
     "/api/mm/topic_relevent/{topic}": {
@@ -145,8 +155,39 @@
               }
             }
           }
+        },
+        "security": [
+          {
+            "APIKeyHeader": ["OMEGA_MM_API_KEY"]
+          }
+        ]
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Health Check",
+        "operationId": "healthcheck",
+        "responses": {
+          "200": {
+            "description": "Successful Response with current datetime.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "datetime",
+                  "example": "2024-06-01T00:00:00Z"
+                }
+              }
+            }
+          }
         }
       }
+    }
+  },
+  "securitySchemes": {
+    "APIKeyHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
     }
   }
 }

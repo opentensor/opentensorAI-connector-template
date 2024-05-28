@@ -25,6 +25,8 @@ paths:
                 - "topic1"
                 - "topic2"
                 - "topic3"
+      security:
+        - APIKeyHeader: ["OMEGA_MM_API_KEY"]
   /api/mm/topic_video_count:
     get:
       summary: "Get all topics and their corresponding total number of videos from the multi-modal dataset"
@@ -48,6 +50,8 @@ paths:
                   num_videos: 5000
                 - query: "topic2"
                   num_videos: 3000
+      security:
+        - APIKeyHeader: ["OMEGA_MM_API_KEY"]
   /api/mm/topic_relevent/{topic}:
     get:
       summary: "Get all videos and their metadata relevant to the provided topic from the multi-modal dataset"
@@ -95,3 +99,10 @@ paths:
                   description: "3ds Max Fundamentals: 3D Modeling and Look Development\n\nOr you can check my Udemy courses here directly: - Digital Painting with Krita 5.0 for beginners ..."
                   start_time: 0
                   end_time: 120
+      security:
+        - APIKeyHeader: ["OMEGA_MM_API_KEY"]
+securitySchemes:
+  APIKeyHeader:
+    type: "apiKey"
+    in: "header"
+    name: "Authorization"
