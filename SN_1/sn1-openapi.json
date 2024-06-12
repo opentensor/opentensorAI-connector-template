@@ -1,0 +1,206 @@
+{
+  "paths": {
+    "/chat/": {
+      "post": {
+        "responses": {
+          "400": {
+            "schema": {
+              "$ref": "#/definitions/StreamError"
+            },
+            "description": ""
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/StreamChunk"
+            },
+            "description": ""
+          }
+        },
+        "parameters": [
+          {
+            "in": "body",
+            "required": false,
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/QueryChat"
+            }
+          }
+        ],
+        "tags": [
+          "Prompting API"
+        ],
+        "summary": "Chat",
+        "description": "Chat endpoint.",
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/echo/": {
+      "post": {
+        "responses": {
+          "400": {
+            "schema": {
+              "$ref": "#/definitions/StreamError"
+            },
+            "description": ""
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/StreamChunk"
+            },
+            "description": ""
+          }
+        },
+        "parameters": [
+          {
+            "in": "body",
+            "required": false,
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/QueryChat"
+            }
+          }
+        ],
+        "tags": [
+          "Prompting API"
+        ],
+        "summary": "Echo test",
+        "description": "Echo endpoint for testing purposes.",
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Prompting API",
+    "version": "0.0.1"
+  },
+  "swagger": "2.0",
+  "definitions": {
+    "QueryChat": {
+      "type": "object",
+      "properties": {
+        "k": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of miners from which to request responses."
+        },
+        "exclude": {
+          "type": "array",
+          "description": "A list of roles or agents to exclude from querying.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "roles": {
+          "type": "array",
+          "description": "The roles of the agents to query.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "messages": {
+          "type": "array",
+          "description": "The messages to be sent to the network.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The time in seconds to wait for a response."
+        },
+        "prefer": {
+          "type": "string",
+          "description": "The preferred response format, can be either 'longest' or 'shortest'."
+        },
+        "sampling_mode": {
+          "type": "string",
+          "description": "The mode of sampling to use, defaults to 'random'. Can be either 'random' or 'top_incentive'."
+        }
+      },
+      "required": [
+        "messages",
+        "roles"
+      ]
+    },
+    "StreamError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Description of the error occurred."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "The timestamp of the error."
+        },
+        "sequence_number": {
+          "type": "integer",
+          "format": "int32",
+          "description": "A sequential identifier for the error."
+        },
+        "finish_reason": {
+          "type": "string",
+          "description": "Indicates an error completion."
+        }
+      },
+      "required": [
+        "error",
+        "sequence_number",
+        "timestamp"
+      ]
+    },
+    "StreamChunk": {
+      "type": "object",
+      "properties": {
+        "delta": {
+          "type": "string",
+          "description": "The new chunk of response received."
+        },
+        "finish_reason": {
+          "type": "string",
+          "description": "The reason for the response completion, if applicable."
+        },
+        "accumulated_chunks": {
+          "type": "array",
+          "description": "All accumulated chunks of responses.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accumulated_chunks_timings": {
+          "type": "array",
+          "description": "Timing for each chunk received.",
+          "items": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "The timestamp at which the chunk was processed."
+        },
+        "sequence_number": {
+          "type": "integer",
+          "format": "int32",
+          "description": "A sequential identifier for the response part."
+        },
+        "selected_uid": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The identifier for the selected response source."
+        }
+      },
+      "required": [
+        "delta",
+        "selected_uid",
+        "sequence_number",
+        "timestamp"
+      ]
+    }
+  }
+}
